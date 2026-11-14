@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Işık Parçacıkları · Code with Kerim</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#121110}canvas{display:block;touch-action:none}.ipucu{position:fixed;left:0;right:0;top:42%;text-align:center;font:700 22px system-ui,sans-serif;color:#fff3c4;opacity:.85;pointer-events:none;transition:opacity .6s}.imza{position:fixed;left:16px;bottom:16px;font:600 14px ui-monospace,Menlo,monospace;color:#fff3c4;opacity:.6;text-decoration:none}</style>
+</head>
+<body>
+<canvas></canvas>
+<div class="ipucu" id="ipucu">Parmağını ya da fareni gezdir ✨</div>
+<a class="imza" href="https://www.instagram.com/codewithkerim/">@codewithkerim</a>
+<script>addEventListener("pointermove",()=>{document.getElementById("ipucu").style.opacity=0},{once:true})</script>
+<script>
+const c = document.querySelector('canvas');
+const ctx = c.getContext('2d');
+c.width = innerWidth; c.height = innerHeight;
+let parts = [];
+
+addEventListener('pointermove', e => {
+  for (let i = 0; i < 5; i++) parts.push({
+    x: e.clientX, y: e.clientY,
+    vx: (Math.random() - .5) * 4,
+    vy: (Math.random() - .5) * 4,
+    life: 1, hue: 15 + Math.random() * 35
+  });
+});
+
+(function loop() {
+  ctx.fillStyle = 'rgba(18,17,16,.2)';
+  ctx.fillRect(0, 0, c.width, c.height);
+  ctx.globalCompositeOperation = 'lighter';
+  parts = parts.filter(p => (p.life -= .015) > 0);
+  for (const p of parts) {
+    p.x += p.vx; p.y += p.vy;
+    ctx.fillStyle = `hsla(${p.hue},100%,60%,${p.life})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.life * 12, 0, 7);
+    ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
