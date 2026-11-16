@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Bug Avcısı · Bölüm 1</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#111;touch-action:none;display:grid;place-items:center}canvas{display:block}</style>
+</head>
+<body>
+<canvas id="oyun"></canvas>
+<script>
+function oyunOlustur(canvas) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height, k = W / 400;
+  let bocekler = [], puan = 0, sayac = 0;
+
+  function update(dt) {
+    sayac -= dt;
+    if (sayac <= 0) {
+      sayac = 0.8;
+      bocekler.push({ x: (40 + Math.random() * 320) * k, y: 100 * k + Math.random() * (H - 180 * k), omur: 2 });
+    }
+    bocekler.forEach(b => b.omur -= dt);
+    bocekler = bocekler.filter(b => b.omur > 0);
+  }
+
+  function draw() {
+    ctx.fillStyle = '#222';
+    ctx.fillRect(0, 0, W, H);
+    ctx.font = 44 * k + 'px serif';
+    ctx.textAlign = 'center';
+    bocekler.forEach(b => ctx.fillText('🐛', b.x, b.y + 15 * k));
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'white';
+    ctx.font = 24 * k + 'px Arial';
+    ctx.fillText('Puan: ' + puan, 16 * k, 40 * k);
+  }
+
+  function tap(x, y) {
+    const i = bocekler.findIndex(b => Math.abs(b.x - x) < 30 * k && Math.abs(b.y - y) < 30 * k);
+    if (i >= 0) {
+      bocekler.splice(i, 1);
+      puan++;
+    }
+  }
+
+  return { update, draw, tap, get bocekler() { return bocekler; } };
+}
+</script>
+<script>
+const cv = document.getElementById('oyun');
+const dpr = Math.min(devicePixelRatio || 1, 2);
+const w = Math.min(innerWidth, innerHeight * 9 / 16), h = innerHeight;
+cv.style.width = w + 'px'; cv.style.height = h + 'px';
+cv.width = w * dpr; cv.height = h * dpr;
+const oyun = oyunOlustur(cv);
+cv.addEventListener('pointerdown', e => {
+  const r = cv.getBoundingClientRect();
+  oyun.tap((e.clientX - r.left) * dpr, (e.clientY - r.top) * dpr);
+});
+let once = performance.now();
+(function dongu(simdi) {
+  oyun.update(Math.min(0.05, (simdi - once) / 1000));
+  once = simdi;
+  oyun.draw();
+  requestAnimationFrame(dongu);
+})(once);
+</script>
+</body>
+</html>
