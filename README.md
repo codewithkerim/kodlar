@@ -6,6 +6,6 @@ Her klasördeki `index.html` dosyası tek başına çalışır. İndirip tarayı
 
 | | Efekt | Canlı dene | Kod |
 |---|---|---|---|
-| ✦ | Işık parçacıkları: parmağını takip eden ışıklar (29 satır JS) | [Dene](https://codewithkerim.github.io/kodlar/isik-parcaciklari/) | [index.html](isik-parcaciklari/index.html) |
+| 🐛 | **Bug Avcısı**: Claude ile 5 bölümde sıfırdan yapılan oyun ([1](bug-avcisi/bolum-1.html) · [2](bug-avcisi/bolum-2.html) · [3](bug-avcisi/bolum-3.html) · [4](bug-avcisi/bolum-4.html) · [5](bug-avcisi/index.html)) | [Oyna](https://codewithkerim.github.io/kodlar/bug-avcisi/) | [index.html](bug-avcisi/index.html) |
 
 Kodları istediğin gibi kullanabilir, değiştirebilir ve paylaşabilirsin. Bir şey yaparsan beni etiketle, görmek isterim ⚡
